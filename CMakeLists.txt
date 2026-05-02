@@ -13,7 +13,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CXX_STANDARD_REQUIRED ON)
 
-project("WueHans Template Game")
+project("Hans2PlayAround")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 if(NOT DESKTOPBUILD)
@@ -27,11 +27,11 @@ if(NOT DESKTOPBUILD)
 endif()
 
 include(FetchContent)
-FetchContent_Declare(Halib
-    GIT_REPOSITORY https://github.com/byter64/Halib.git
-    GIT_TAG v3.1
+FetchContent_Declare(Hall
+	GIT_REPOSITORY "https://github.com/Byter64/Hall"
+	GIT_TAG main
 )
-FetchContent_MakeAvailable(Halib)
+FetchContent_MakeAvailable(Hall)
 
 if(NOT DESKTOPBUILD)
 	add_subdirectory(lib)

@@ -1,31 +1,21 @@
+#include <Hall/Hall.h>
+#include "Time.hpp"
+#include "System.hpp"
 #include <memory>
-#include "Halib/Halib.h"
-#include "Character.h"
-#include "Halib/Graphic.h"
+#include <iostream>
+
+using namespace Halib;
 
 int main() 
 {
-	Halib::Init();
-	//Create a player and add it to the system.
-	//Entities will only be updated and drawn, when they have been added via AddEntity(...)
-	std::shared_ptr<Character> player = std::make_shared<Character>(50.0f);
-	Halib::AddEntity(player);
-
-	std::shared_ptr<Halib::Rect> greenRect = std::make_shared<Halib::Rect>(Halib::VecI2(35, 60), Halib::VecI2(40, 80), Halib::Color(0, 31, 5));
-	Halib::AddEntity(greenRect);
-
-	//We have 5 Bits per color channel, so 31 is the max value
-	Halib::rendersystem.backgroundColor = Halib::Color(15, 0, 24);
-	while(!Halib::GetShouldClose()) 
+	Hall::Init();
+	System::Init();
+	Time::SetTargetFramerate(30);
+	
+	while(!Hall::ShouldClose())
 	{
-		Halib::rendersystem.backgroundColor.SetGreen((Halib::rendersystem.backgroundColor.GetGreen() + 1) % 32);
-		
-		//Normally, you don't need to touch this loop. Just let your classes inherit from Entity
-		//to build your game (see Character.h)
-
-		//This updates all halibs system, including inputs, graphics and entity logic
-		//Take a look: Select Update() and press F12(?)
-		Halib::Update();
+		std::cout << Halib::Time::GetDeltaTime() << std::endl;
+		System::FinishFrame();
 	}
 	
 	return 0;
