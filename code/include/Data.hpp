@@ -8,7 +8,7 @@ namespace Halib::Data
 	/// @brief Loads a bitmap image from the file system into RAM and returns a pointer to the loaded image. The image in RAM is always of the type R5G5B5A1
 	/// @param path the path to the file to load
 	/// @return A pointer to the loaded image data
-	std::unique_ptr<Image> LoadImage(const char* path);
+	std::shared_ptr<Image> LoadImage(const char* path);
 
 
 	/// @brief Creates a color from the given values

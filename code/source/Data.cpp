@@ -4,7 +4,7 @@
 
 namespace Halib::Data
 {
-	std::unique_ptr<Image> LoadImage(const char* path)
+	std::shared_ptr<Image> LoadImage(const char* path)
 	{
 		bmpread_t bmp;
 		int result = bmpread(path, BMPREAD_TOP_DOWN | BMPREAD_ANY_SIZE | BMPREAD_ALPHA | BMPREAD_BYTE_ALIGN, &bmp);
@@ -14,7 +14,7 @@ namespace Halib::Data
 		}
 		std::unique_ptr<Hall::Color[]> data((Hall::Color*)bmp.data);
 		
-		std::unique_ptr<Image> image = std::make_unique<Image>();
+		std::shared_ptr<Image> image = std::make_shared<Image>();
 		image->SetData(std::move(data));
 		image->width = bmp.width;
 		image->height = bmp.height;
