@@ -8,7 +8,7 @@
 
 using namespace Halib;
 #ifdef DESKTOP
-int main( int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 	if(argc >= 1)
 	{
@@ -28,7 +28,17 @@ int main()
 	while(!Hall::ShouldClose())
 	{
 		//RENDER CODE
-		while(Hall::GetIsGPUBusy());
+		Hall::SetScale(1, 1);
+		Hall::SetFlip(false, false);
+		Hall::SetColor(1);
+		Hall::SetColorTable(Hall::NONE);
+		Hall::SetColorSource(Hall::COLOR);
+		Hall::SetShape(Hall::RECTANGLE);
+		Hall::SetRectangle(0, 0, Hall::SCREEN_WIDTH, Hall::SCREEN_HEIGHT);
+
+		Hall::Draw();
+		while (Hall::GetIsGPUBusy());
+
 	    bool wdr = image->wasDataRequested;
 		Hall::SetImage((Hall::Color*)image->GetData(), image->width, image->height);
 		image->wasDataRequested = wdr;
@@ -55,7 +65,7 @@ int main()
 		
 		//RENDER CODE END
 
-		std::cout << Halib::Time::GetDeltaTime() << std::endl;
+		//std::cout << Halib::Time::GetDeltaTime() << std::endl;
 		System::FinishFrame();
 	}
 	

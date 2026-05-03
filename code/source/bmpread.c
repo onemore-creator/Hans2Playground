@@ -578,7 +578,7 @@ static int Validate(read_context * p_ctx)
     p_ctx->file_line_len = GetLineLength(p_ctx->info.width, p_ctx->info.bits);
     if(p_ctx->file_line_len == 0) return 0;
 
-    p_ctx->out_channels = ((p_ctx->flags & BMPREAD_ALPHA) ? 4 : 3);
+    p_ctx->out_channels = 2;
 
     /* This check happens outside the following if, where it would seem to
      * belong, because we make the same computation again in the future.
@@ -608,19 +608,20 @@ static int Validate(read_context * p_ctx)
     return 1;
 }
 
-/* Evenly distribute a value that spans a given number of bits into 8 bits.
+
+/* Evenly distribute a value that spans a given number of bits into 5 bits.
  */
-static uint32_t Make8Bits(uint32_t value, uint32_t bitspan)
+static uint32_t Make5Bits(uint32_t value, uint32_t bitspan)
 {
     uint32_t output = 0;
 
-    if(bitspan == 8)
+    if (bitspan == 5)
         return value;
-    if(bitspan > 8)
-        return value >> (bitspan - 8);
+    if (bitspan > 5)
+        return value >> (bitspan - 5);
 
-    value <<= (8 - bitspan); /* Shift it up into the most significant bits. */
-    while(value)
+    value <<= (5 - bitspan); /* Shift it up into the most significant bits. */
+    while (value)
     {
         /* Repeat the bit pattern down into the least significant bits.  This
          * gives an even distribution when extrapolating from [0, 2^bitspan-1]
@@ -665,18 +666,18 @@ static void Decode32(uint8_t * p_out,
     while(p_out < p_out_end)
     {
         uint32_t value = LoadLittleUint32(p_file);
+        uint16_t color = 0;
 
-        *p_out++ = Make8Bits(ApplyBitfield(value, bf[0]), bf[0].span);
-        *p_out++ = Make8Bits(ApplyBitfield(value, bf[1]), bf[1].span);
-        *p_out++ = Make8Bits(ApplyBitfield(value, bf[2]), bf[2].span);
-        if(p_ctx->out_channels == 4)
-        {
-            if(bf[3].span)
-                *p_out++ = Make8Bits(ApplyBitfield(value, bf[3]), bf[3].span);
-            else
-                *p_out++ = BMPREAD_DEFAULT_ALPHA;
-        }
+        color |= Make5Bits(ApplyBitfield(value, bf[0]), bf[0].span) << 11;
+        color |= Make5Bits(ApplyBitfield(value, bf[1]), bf[1].span) << 6;
+        color |= Make5Bits(ApplyBitfield(value, bf[2]), bf[2].span) << 1;
+        if (bf[3].span)
+            color |= Make5Bits(ApplyBitfield(value, bf[3]), bf[3].span) >= 24;
+        else
+            color |= 1;
 
+        *((uint16_t*)p_out) = color;
+        p_out += 2;
         p_file += 4;
     }
 }
@@ -691,12 +692,15 @@ static void Decode24(uint8_t * p_out,
 {
     while(p_out < p_out_end)
     {
-        *p_out++ = *(p_file + 2);
-        *p_out++ = *(p_file + 1);
-        *p_out++ = *(p_file    );
-        if(p_ctx->out_channels == 4)
-            *p_out++ = BMPREAD_DEFAULT_ALPHA;
+        uint16_t color = 0;
 
+        color |= *(p_file + 2) << 11;
+        color |= *(p_file + 1) << 16;
+        color |= *(p_file    ) << 1;
+        color |= 1;
+
+        *((uint16_t*)p_out) = color;
+        p_out += 2;
         p_file += 3;
     }
 }
@@ -718,18 +722,18 @@ static void Decode16(uint8_t * p_out,
     while(p_out < p_out_end)
     {
         uint16_t value = LoadLittleUint16(p_file);
+        uint16_t color = 0;
 
-        *p_out++ = Make8Bits(ApplyBitfield(value, bf[0]), bf[0].span);
-        *p_out++ = Make8Bits(ApplyBitfield(value, bf[1]), bf[1].span);
-        *p_out++ = Make8Bits(ApplyBitfield(value, bf[2]), bf[2].span);
-        if(p_ctx->out_channels == 4)
-        {
-            if(bf[3].span)
-                *p_out++ = Make8Bits(ApplyBitfield(value, bf[3]), bf[3].span);
-            else
-                *p_out++ = BMPREAD_DEFAULT_ALPHA;
-        }
+        color |= Make5Bits(ApplyBitfield(value, bf[0]), bf[0].span) << 11;
+        color |= Make5Bits(ApplyBitfield(value, bf[1]), bf[1].span) << 6;
+        color |= Make5Bits(ApplyBitfield(value, bf[2]), bf[2].span) << 1;
+        if(bf[3].span)
+           color |= Make5Bits(ApplyBitfield(value, bf[3]), bf[3].span) >= 24;
+        else
+            color |= 1;
 
+        *((uint16_t*)p_out) = color;
+        p_out += 2;
         p_file += 2;
     }
 }
@@ -742,12 +746,14 @@ static void Decode8(uint8_t * p_out,
                     const read_context * p_ctx)
 {
     while(p_out < p_out_end) {
-        *p_out++ = p_ctx->palette[*p_file].red;
-        *p_out++ = p_ctx->palette[*p_file].green;
-        *p_out++ = p_ctx->palette[*p_file].blue;
-        if(p_ctx->out_channels == 4)
-            *p_out++ = BMPREAD_DEFAULT_ALPHA;
+        uint16_t color = 0;
+        color |= p_ctx->palette[*p_file].red << 11;
+        color |= p_ctx->palette[*p_file].green << 6;
+        color |= p_ctx->palette[*p_file].blue << 1;
+        color |= 1;
 
+        *((uint16_t*)p_out) = color;
+        p_out += 2;
         p_file++;
     }
 }
@@ -762,22 +768,27 @@ static void Decode4(uint8_t * p_out,
     while(p_out < p_out_end)
     {
         unsigned int lookup = (*p_file & 0xf0U) >> 4;
+        uint16_t color = 0;
 
-        *p_out++ = p_ctx->palette[lookup].red;
-        *p_out++ = p_ctx->palette[lookup].green;
-        *p_out++ = p_ctx->palette[lookup].blue;
-        if(p_ctx->out_channels == 4)
-            *p_out++ = BMPREAD_DEFAULT_ALPHA;
+        color |= p_ctx->palette[lookup].red << 11;
+        color |= p_ctx->palette[lookup].green << 6;
+        color |= p_ctx->palette[lookup].blue << 1;
+        color |= 1;
+
+        *((uint16_t*)p_out) = color;
+        p_out += 2;
 
         if(p_out < p_out_end)
         {
             lookup = *p_file++ & 0x0fU;
 
-            *p_out++ = p_ctx->palette[lookup].red;
-            *p_out++ = p_ctx->palette[lookup].green;
-            *p_out++ = p_ctx->palette[lookup].blue;
-            if(p_ctx->out_channels == 4)
-                *p_out++ = BMPREAD_DEFAULT_ALPHA;
+            color |= p_ctx->palette[lookup].red << 11;
+            color |= p_ctx->palette[lookup].green << 6;
+            color |= p_ctx->palette[lookup].blue << 1;
+            color |= 1;
+
+            *((uint16_t*)p_out) = color;
+            p_out += 2;
         }
     }
 }
@@ -795,12 +806,15 @@ static void Decode1(uint8_t * p_out,
         for(bit = 0; bit < 8 && p_out < p_out_end; bit++)
         {
             unsigned int lookup = (*p_file >> (7 - bit)) & 1;
+            uint16_t color = 0;
 
-            *p_out++ = p_ctx->palette[lookup].red;
-            *p_out++ = p_ctx->palette[lookup].green;
-            *p_out++ = p_ctx->palette[lookup].blue;
-            if(p_ctx->out_channels == 4)
-                *p_out++ = BMPREAD_DEFAULT_ALPHA;
+            color |= p_ctx->palette[lookup].red << 11;
+            color |= p_ctx->palette[lookup].green << 6;
+            color |= p_ctx->palette[lookup].blue << 1;
+            color |= 1;
+
+            *((uint16_t*)p_out) = color;
+            p_out += 2;
         }
 
         p_file++;

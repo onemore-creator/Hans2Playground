@@ -7,34 +7,18 @@ namespace Halib::Data
 	std::unique_ptr<Image> LoadImage(const char* path)
 	{
 		bmpread_t bmp;
-		int result = bmpread(path, BMPREAD_TOP_DOWN | BMPREAD_ANY_SIZE | BMPREAD_ALPHA, &bmp);
+		int result = bmpread(path, BMPREAD_TOP_DOWN | BMPREAD_ANY_SIZE | BMPREAD_ALPHA | BMPREAD_BYTE_ALIGN, &bmp);
 		if(!result)
 		{
-			std::cerr << "COULD NOT LOAD ASSET " << path << std::endl;
+			std::cerr << "COULD NOT LOAD ASSET \"" << path << "\". Idk why, though..." << std::endl;
 		}
-		std::unique_ptr<Hall::Color[]> data = std::make_unique<Hall::Color[]>(bmp.width * bmp.height);
-		
-		//This is stupid, but changing bmpread to directly output R5G5B5A1 did not seem so straight forward
-		for(int i = 0; i < bmp.width * bmp.height; i++)
-		{
-			unsigned char red   = bmp.data[4 * i + 0];
-			unsigned char green = bmp.data[4 * i + 1];
-			unsigned char blue  = bmp.data[4 * i + 2];
-			unsigned char alpha = bmp.data[4 * i + 3];
-			
-			red = red >> 3;
-			green = green >> 3;
-			blue = blue >> 3;
-			
-			Hall::Color color = CreateColor(red, green, blue, alpha >= 192);
-			data[i] = color;
-		}
+		std::unique_ptr<Hall::Color[]> data((Hall::Color*)bmp.data);
 		
 		std::unique_ptr<Image> image = std::make_unique<Image>();
 		image->SetData(std::move(data));
 		image->width = bmp.width;
 		image->height = bmp.height;
-		bmpread_free(&bmp);
+		//bmpread_free(&bmp); //We don't call free anymore because that would delete the loaded data
 
 		return image;
 	}
