@@ -26,11 +26,13 @@ int main()
 
 	auto image = Data::LoadImage("assets/byterLogo.bmp");
 	
+	System::ShowCoolTitle(image, 140, 60);
+
 	while(!Hall::ShouldClose())
 	{
 		//RENDER CODE
-		System::Clear(1);
-		System::Render(image, 50, 50);
+		System::Clear(Data::CreateColor(0, 0, 0, 1));
+		System::Render(image, 140, 60);
 		//RENDER CODE END
 
 		std::cout << Halib::Time::GetDeltaTime() << std::endl;

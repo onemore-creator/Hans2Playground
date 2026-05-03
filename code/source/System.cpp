@@ -1,6 +1,8 @@
 #include "System.hpp"
 #include <Hall/Hall.h>
 #include "Time.hpp"
+#include "Data.hpp"
+#include <iostream>
 
 namespace Halib::System
 {
@@ -36,6 +38,51 @@ namespace Halib::System
 
 		Time::SetDeltaTime(time2 - time1);
 		time1 = time2;
+	}
+
+	void ShowCoolTitle(std::shared_ptr<Data::Image> image, short x, short y)
+	{
+		std::unique_ptr<Hall::Color[]> data = std::make_unique<Hall::Color[]>(image->width * image->height);
+		for(int i = 0; i < image->width * image->height; i++)
+			data.get()[i] = image->GetData()[i];
+		
+		std::shared_ptr<Data::Image> titleScreen = std::make_shared<Data::Image>();
+		titleScreen->width = image->width;
+		titleScreen->height = image->height;
+		titleScreen->SetData(std::move(data));
+
+		std::cout << "CoolTitle started" << std::endl;
+		float timer = 3.0f;
+		float time = 0.7f;
+		int counter = 0;
+
+		while(!Hall::ShouldClose() && counter < 5)
+		{
+			timer -= Time::GetDeltaTime();
+
+			if(timer <= 0)
+			{
+				//Darken each pixel
+				Hall::Color* color = titleScreen->GetData();
+				for (; color < (titleScreen->GetData() + titleScreen->width * titleScreen->height); color++)
+				{
+					*color = Data::SetRed(*color, Data::GetRed(*color) / 2);
+					*color = Data::SetGreen(*color, Data::GetGreen(*color) / 2);
+					*color = Data::SetBlue(*color, Data::GetBlue(*color) / 2);
+				}
+
+				timer = time;
+				counter++;
+			}
+
+			//RENDER CODE
+			System::Clear(1);
+			System::Render(titleScreen, x, y);
+			//RENDER CODE END
+			System::FinishFrame();
+		}
+
+		std::cout << "CoolTitle finished" << std::endl;
 	}
 
 	void Render(const std::shared_ptr<Data::Image> image, short x, short y)
