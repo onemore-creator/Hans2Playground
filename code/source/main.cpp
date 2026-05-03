@@ -1,14 +1,24 @@
 #include <Hall/Hall.h>
 #include <memory>
 #include <iostream>
+#include <filesystem>
 #include "Time.hpp"
 #include "System.hpp"
 #include "Data.hpp"
 
 using namespace Halib;
-
+#ifdef DESKTOP
+int main( int argc, char *argv[])
+{
+	if(argc >= 1)
+	{
+		std::cout << argv[0] << std::endl;
+		std::filesystem::current_path(std::filesystem::path(argv[0]).parent_path());
+	}
+#else
 int main() 
 {
+#endif
 	Hall::Init();
 	System::Init();
 	Time::SetTargetFramerate(30);
