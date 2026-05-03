@@ -69,6 +69,10 @@ target_sources(${FINAL_TARGET} PUBLIC
   "source/main.cpp"
   "source/Time.cpp"
   "source/System.cpp"
+  "source/Data.cpp"
+  "source/Image.cpp"
+  
+  "source/bmpread.c"
 )
 
 # This is stuff for debugging the hardware. Just ignore it :)
