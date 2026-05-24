@@ -1,6 +1,7 @@
 # pragma once
 #include <memory>
 #include "Image.hpp"
+#include "Simage.hpp"
 
 namespace Halib::System
 {
@@ -11,7 +12,10 @@ namespace Halib::System
 	void ShowCoolTitle(std::shared_ptr<Data::Image> image, short x, short y);
 
 	/// @brief Renders an image at the given position. Origin is top left
-	void Render(const std::shared_ptr<Data::Image> image, short x, short y);
+	void Render(const std::shared_ptr<Data::Image> image, short x, short y, short xScale = 1, short yScale = 1);
+	
+	/// @brief Renders an simage at the given position with the given scale
+	void Render(const std::shared_ptr<Data::Simage> simage, short x, short y, short scale = 1);
 
 	/// @brief Sets the whole screen to the given color
 	void Clear(Hall::Color color);

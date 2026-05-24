@@ -23,6 +23,25 @@ namespace Halib::Data
 		return image;
 	}
 
+	std::shared_ptr<Simage> LoadSimage(const char* path, const char* path2)
+	{
+		char buf[256];
+		if(path2 == nullptr)
+		{
+			strcpy(buf, path);
+			char* ext = strstr(buf, ".bmp");
+			strcpy(ext, "75.bmp");
+		}
+		else
+			strcpy(buf, path2);
+
+		std::shared_ptr<Simage> simage = std::make_shared<Simage>();
+		simage->image = LoadImage(path);
+		simage->image75 = LoadImage(buf);
+
+		return simage;
+	}
+
 	Hall::Color CreateColor(char red, char green, char blue, bool alpha)
 	{
 		Hall::Color color = 0;

@@ -10,7 +10,7 @@ namespace Halib::Data
 
 namespace Halib::System
 {
-	void Render(const std::shared_ptr<Data::Image> image, short x, short y);
+	void Render(const std::shared_ptr<Data::Image> image, short x, short y, short xScale, short yScale);
 }
 
 namespace Halib::Data
@@ -18,7 +18,7 @@ namespace Halib::Data
 	/// @brief A datatype that holds an R5G5B5A1 image
 	struct Image
 	{
-		friend void Halib::System::Render(const std::shared_ptr<Data::Image> image, short x, short y);
+		friend void Halib::System::Render(const std::shared_ptr<Data::Image> image, short x, short y, short xScale, short yScale);
 
 		short width; //Image width in pixels
 		short height; //Image height in pixels

@@ -85,7 +85,7 @@ namespace Halib::System
 		std::cout << "CoolTitle finished" << std::endl;
 	}
 
-	void Render(const std::shared_ptr<Data::Image> image, short x, short y)
+	void Render(const std::shared_ptr<Data::Image> image, short x, short y, short xScale, short yScale)
 	{
 		//DESKTOP ONLY:
 		//GetData sets wasDataRequested to true, thereby forcing the image data to be sent every render to the GPU.
@@ -116,10 +116,33 @@ namespace Halib::System
 		Hall::SetColorTable(Hall::CTType::NONE);
         Hall::SetColorSource(Hall::MEMORY);
 	    Hall::SetExcerpt(0,0, image->width, image->height);
-	    Hall::SetScale(1, 1);
+	    Hall::SetScale(xScale, yScale);
 	    Hall::SetFlip(false, false);
 	    Hall::SetScreenPosition(x, y);
 	    Hall::Draw();
+	}
+
+	void Render(const std::shared_ptr<Data::Simage> simage, short x, short y, short scale)
+	{
+		if(scale == 0) return;
+
+		short oldScale = scale;
+		bool useBig = scale & 1;
+		
+		if(scale < -4)
+		{
+			useBig = true;
+			scale  = scale + 2;
+		}
+		else if (scale < 0)
+			scale = (scale - 1) / 2;
+		else
+			scale = (scale / 2) + 1;
+
+		if(useBig)
+			Render(simage->image, x, y, scale, scale);
+		else
+			Render(simage->image75, x, y, scale, scale);
 	}
 
 	void Clear(Hall::Color color)
