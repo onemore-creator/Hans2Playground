@@ -73,6 +73,7 @@ target_sources(${FINAL_TARGET} PUBLIC
   "source/Image.cpp"
   "source/Sprite.cpp"
   "source/Vec2.cpp"
+  "source/Camera.cpp"
 
   "source/bmpread.c"
 

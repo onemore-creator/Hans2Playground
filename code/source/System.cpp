@@ -6,6 +6,8 @@
 
 namespace Halib::System
 {
+
+	Data::Camera camera{};
 	static float time1;
 
 	void Init()
@@ -202,9 +204,15 @@ namespace Halib::System
 
 	void Render(const std::shared_ptr<Data::Entity> entity)
 	{
+		entity->sprite->SetScale(camera.GetSpriteScale());
+
 		Data::Vec2 position = entity->position;
+		position -= Data::Vec2(Hall::SCREEN_WIDTH, Hall::SCREEN_HEIGHT) / 2;
+		position = Data::Vec2((float)position.x * camera.GetZoom(), (float)position.y * camera.GetZoom());
+		position += Data::Vec2(Hall::SCREEN_WIDTH, Hall::SCREEN_HEIGHT) / 2;
+		position -= camera.position;
 		position -= entity->sprite->GetScaledFrameSize() / 2;
-		std::cout << position << std::endl;
+
 		Render(entity->sprite, position.x, position.y);
 	}
 

@@ -4,9 +4,12 @@
 #include "Simage.hpp"
 #include "Sprite.hpp"
 #include "Entity.hpp"
+#include "Camera.hpp"
 
 namespace Halib::System
 {
+	extern Data::Camera camera;
+
 	void Init();
 	void FinishFrame();
 

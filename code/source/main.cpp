@@ -34,9 +34,14 @@ int main()
 
 	auto sprite = std::make_shared<Data::Sprite>(image, image75, Data::Vec2(1));
 	auto spriteShroom = std::make_shared<Data::Sprite>(imageShroom, imageShroom75, Data::Vec2(8, 1));
+
 	auto entity = std::make_shared<Data::Entity>();
-	entity->position = Data::Vec2(200, 60);
-	entity->sprite = spriteShroom;
+	entity->position = Data::Vec2(100, 100);
+	entity->sprite = sprite;
+
+	auto entityShroom = std::make_shared<Data::Entity>();
+	entityShroom->position = Data::Vec2(260, 100);
+	entityShroom->sprite = spriteShroom;
 
 	//System::ShowCoolTitle(image, 140, 60);
 
@@ -67,9 +72,9 @@ int main()
 		if(!down && newDown)
 			spriteShroom->IncrementAnimation(-1);
 		if(!left && newLeft)
-			scale--;
+			System::camera.SetZoom(System::camera.GetZoom() - 0.1f);
 		if(!right && newRight)
-			scale++;
+			System::camera.SetZoom(System::camera.GetZoom() + 0.1f);
 		
 		up = newUp;
 		down = newDown;
@@ -81,8 +86,8 @@ int main()
 		//RENDER CODE
 		System::Clear(Data::CreateColor(3, 3, 3, 1));
 		//System::Render(image, 100, 60, scale, scale);
-		System::Render(sprite, 20, 60);
 		System::Render(entity);
+		System::Render(entityShroom);
 		//RENDER CODE END
 
 		//std::cout << Halib::Time::GetDeltaTime() << std::endl;
