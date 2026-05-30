@@ -4,6 +4,7 @@
 #include "Data.hpp"
 #include <iostream>
 
+
 namespace Halib::System
 {
 	static float time1;
@@ -42,13 +43,13 @@ namespace Halib::System
 
 	void ShowCoolTitle(std::shared_ptr<Data::Image> image, short x, short y)
 	{
-		std::unique_ptr<Hall::Color[]> data = std::make_unique<Hall::Color[]>(image->width * image->height);
-		for(int i = 0; i < image->width * image->height; i++)
+		std::unique_ptr<Hall::Color[]> data = std::make_unique<Hall::Color[]>(image->size.x * image->size.y);
+		for(int i = 0; i < image->size.x * image->size.y; i++)
 			data.get()[i] = image->GetData()[i];
 		
 		std::shared_ptr<Data::Image> titleScreen = std::make_shared<Data::Image>();
-		titleScreen->width = image->width;
-		titleScreen->height = image->height;
+		titleScreen->size.x = image->size.x;
+		titleScreen->size.y = image->size.y;
 		titleScreen->SetData(std::move(data));
 
 		std::cout << "CoolTitle started" << std::endl;
@@ -64,7 +65,7 @@ namespace Halib::System
 			{
 				//Darken each pixel
 				Hall::Color* color = titleScreen->GetData();
-				for (; color < (titleScreen->GetData() + titleScreen->width * titleScreen->height); color++)
+				for (; color < (titleScreen->GetData() + titleScreen->size.x * titleScreen->size.y); color++)
 				{
 					*color = Data::SetRed(*color, Data::GetRed(*color) / 2);
 					*color = Data::SetGreen(*color, Data::GetGreen(*color) / 2);
@@ -99,23 +100,23 @@ namespace Halib::System
 		while (Hall::GetIsGPUBusy())
 		;
 
-		Hall::SetImage(data, image->width, image->height);
+		Hall::SetImage(data, image->size.x, image->size.y);
 #ifdef DESKTOP
 		//These checks have to happen after the first call to SetImage for any given image
 		if(image->wasDataRequested)
 		{
-			Hall::UpdateRaylibTexture((Hall::Color*)image->GetData(), image->width, image->height);
+			Hall::UpdateRaylibTexture((Hall::Color*)image->GetData(), image->size.x, image->size.y);
 		} 
 		else if(image->wasDataSet)
 		{
-			Hall::UpdateRaylibTexture((Hall::Color*)image->GetData(), image->width, image->height);
+			Hall::UpdateRaylibTexture((Hall::Color*)image->GetData(), image->size.x, image->size.y);
 			image->wasDataSet = false;
 			image->wasDataRequested = false;
 		}
 #endif
 		Hall::SetColorTable(Hall::CTType::NONE);
         Hall::SetColorSource(Hall::MEMORY);
-	    Hall::SetExcerpt(0,0, image->width, image->height);
+	    Hall::SetExcerpt(0,0, image->size.x, image->size.y);
 	    Hall::SetScale(xScale, yScale);
 	    Hall::SetFlip(false, false);
 	    Hall::SetScreenPosition(x, y);
@@ -143,6 +144,45 @@ namespace Halib::System
 			Render(simage->image, x, y, scale, scale);
 		else
 			Render(simage->image75, x, y, scale, scale);
+	}
+
+	void Render(const std::shared_ptr<Data::Sprite> sprite, short x, short y)
+	{
+		auto image = sprite->renderImage;
+
+		//DESKTOP ONLY:
+		//GetData sets wasDataRequested to true, thereby forcing the image data to be sent every render to the GPU.
+		//In this case, we can garantuee that we will not change the image data, so it is save to set wasDataRequested
+		//to its old state
+	    bool wasDataRequested = image->wasDataRequested;
+		Hall::Color* data = (Hall::Color*)image->GetData();
+		image->wasDataRequested = wasDataRequested;
+
+		//Wait until GPU is available
+		while (Hall::GetIsGPUBusy())
+		;
+
+		Hall::SetImage(data, image->size.x, image->size.y);
+#ifdef DESKTOP
+		//These checks have to happen after the first call to SetImage for any given image
+		if(image->wasDataRequested)
+		{
+			Hall::UpdateRaylibTexture((Hall::Color*)image->GetData(), image->size.x, image->size.y);
+		} 
+		else if(image->wasDataSet)
+		{
+			Hall::UpdateRaylibTexture((Hall::Color*)image->GetData(), image->size.x, image->size.y);
+			image->wasDataSet = false;
+			image->wasDataRequested = false;
+		}
+#endif
+		Hall::SetColorTable(Hall::CTType::NONE);
+        Hall::SetColorSource(Hall::MEMORY);
+	    Hall::SetExcerpt(sprite->imageOffset.x, sprite->imageOffset.y, sprite->frameSize.x, sprite->frameSize.y);
+	    Hall::SetScale(sprite->renderScale, sprite->renderScale);
+	    Hall::SetFlip(false, false);
+	    Hall::SetScreenPosition(x, y);
+	    Hall::Draw();
 	}
 
 	void Clear(Hall::Color color)

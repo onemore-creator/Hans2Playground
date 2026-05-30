@@ -1,16 +1,19 @@
 #pragma once
 #include <Hall/Hall.h>
 #include <memory>
+#include "Vec2.hpp"
 
 namespace Halib::Data
 {
 	struct Image;
+	struct Sprite;
 }
 
 
 namespace Halib::System
 {
 	void Render(const std::shared_ptr<Data::Image> image, short x, short y, short xScale, short yScale);
+	void Render(const std::shared_ptr<Data::Sprite> sprite, short x, short y);
 }
 
 namespace Halib::Data
@@ -19,9 +22,9 @@ namespace Halib::Data
 	struct Image
 	{
 		friend void Halib::System::Render(const std::shared_ptr<Data::Image> image, short x, short y, short xScale, short yScale);
+		friend void Halib::System::Render(const std::shared_ptr<Data::Sprite> sprite, short x, short y);
 
-		short width; //Image width in pixels
-		short height; //Image height in pixels
+		Vec2 size;
 		
 		/// @brief 
 		/// @return A raw pointer to the underlying raw image data.

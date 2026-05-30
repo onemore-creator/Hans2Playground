@@ -1,0 +1,45 @@
+#pragma once
+#include "Image.hpp"
+#include "Vec2.hpp"
+
+namespace Halib::Data
+{
+	struct Sprite;
+}
+
+
+namespace Halib::System
+{
+	void Render(const std::shared_ptr<Data::Sprite> image, short x, short y);
+}
+
+namespace Halib::Data
+{
+	
+	class Sprite
+	{
+		friend void Halib::System::Render(const std::shared_ptr<Data::Sprite> image, short x, short y); 	
+		std::shared_ptr<Image> image;
+		std::shared_ptr<Image> image75;
+		Vec2 frameCount;
+		Vec2 activeFrame;
+		short scale;
+
+		Vec2 frameSize;
+		Vec2 imageOffset;
+		short renderScale;
+		std::shared_ptr<Image> renderImage;
+
+		short animationLength;
+
+		public:
+		
+		Sprite(std::shared_ptr<Image> image, std::shared_ptr<Image> image75, Vec2 frameCount);
+
+		void SetScale(short scale);
+		short GetScale();
+
+		void IncrementAnimation(short amount);
+		void SetAnimation(short animationIndex, short animationLength);
+	};
+} // namespace Halib::Data

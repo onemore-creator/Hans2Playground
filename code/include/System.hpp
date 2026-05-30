@@ -2,6 +2,7 @@
 #include <memory>
 #include "Image.hpp"
 #include "Simage.hpp"
+#include "Sprite.hpp"
 
 namespace Halib::System
 {
@@ -16,6 +17,9 @@ namespace Halib::System
 	
 	/// @brief Renders an simage at the given position with the given scale
 	void Render(const std::shared_ptr<Data::Simage> simage, short x, short y, short scale = 1);
+
+	/// @brief Renders a sprite at the given position
+	void Render(const std::shared_ptr<Data::Sprite> sprite, short x, short y);
 
 	/// @brief Sets the whole screen to the given color
 	void Clear(Hall::Color color);

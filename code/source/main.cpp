@@ -5,6 +5,7 @@
 #include "Time.hpp"
 #include "System.hpp"
 #include "Data.hpp"
+#include "Sprite.hpp"
 
 using namespace Halib;
 
@@ -26,7 +27,12 @@ int main()
 	Time::SetTargetFramerate(60);
 
 	auto image = Data::LoadImage("assets/byterLogo.bmp");
-	auto simage = Data::LoadSimage("assets/byterLogo.bmp");
+	auto image75 = Data::LoadImage("assets/byterLogo75.bmp");
+	auto imageShroom = Data::LoadImage("assets/Mushroom-Run.bmp");
+	auto imageShroom75 = Data::LoadImage("assets/Mushroom-Run75.bmp");
+
+	auto sprite = std::make_shared<Data::Sprite>(image, image75, Data::Vec2(1));
+	auto spriteShroom = std::make_shared<Data::Sprite>(imageShroom, imageShroom75, Data::Vec2(8, 1));
 	
 	//System::ShowCoolTitle(image, 140, 60);
 
@@ -38,7 +44,7 @@ int main()
 	while(!Hall::ShouldClose())
 	{
 		subscale++;
-		if(subscale >= 5)
+		if(subscale >= 10)
 		{
 			subscale = 0;
 			scale += add;
@@ -48,21 +54,26 @@ int main()
 				add *= -1;
 		}
 
-		/*auto cont = Hall::GetController(0);
+		//TODO: Sprite and animation clash. The framesize and imageOffset need to be both updated when animating or changing the scale
+
+		auto cont = Hall::GetController(0);
 		bool newUp = Hall::GetUp(cont);
 		bool newDown = Hall::GetDown(cont);
 		if(!up && newUp)
-			scale++;
+			spriteShroom->IncrementAnimation(1);
 		if(!down && newDown)
-			scale--;
+			spriteShroom->IncrementAnimation(-1);
 		
 		up = newUp;
-		down = newDown;*/
+		down = newDown;
 		
+		sprite->SetScale(scale);
+		spriteShroom->SetScale(scale);
 		//RENDER CODE
-		System::Clear(Data::CreateColor(0, 0, 0, 1));
+		System::Clear(Data::CreateColor(3, 3, 3, 1));
 		//System::Render(image, 100, 60, scale, scale);
-		System::Render(simage, 160, 60, scale);
+		System::Render(sprite, 20, 60);
+		System::Render(spriteShroom, 200, 60);
 		//RENDER CODE END
 
 		//std::cout << Halib::Time::GetDeltaTime() << std::endl;

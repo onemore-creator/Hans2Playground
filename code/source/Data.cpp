@@ -16,8 +16,8 @@ namespace Halib::Data
 		
 		std::shared_ptr<Image> image = std::make_shared<Image>();
 		image->SetData(std::move(data));
-		image->width = bmp.width;
-		image->height = bmp.height;
+		image->size.x = bmp.width;
+		image->size.y = bmp.height;
 		//bmpread_free(&bmp); //We don't call free anymore because that would delete the loaded data
 
 		return image;
