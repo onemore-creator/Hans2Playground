@@ -4,10 +4,10 @@
 
 namespace Halib::Data
 {
-	std::shared_ptr<Image> LoadImage(const char* path)
+	std::shared_ptr<Image> LoadImage(std::string path)
 	{
 		bmpread_t bmp;
-		int result = bmpread(path, BMPREAD_TOP_DOWN | BMPREAD_ANY_SIZE | BMPREAD_ALPHA | BMPREAD_BYTE_ALIGN, &bmp);
+		int result = bmpread(path.c_str(), BMPREAD_TOP_DOWN | BMPREAD_ANY_SIZE | BMPREAD_ALPHA | BMPREAD_BYTE_ALIGN, &bmp);
 		if(!result)
 		{
 			std::cerr << "COULD NOT LOAD ASSET \"" << path << "\". Idk why, though..." << std::endl;
@@ -23,21 +23,16 @@ namespace Halib::Data
 		return image;
 	}
 
-	std::shared_ptr<Simage> LoadSimage(const char* path, const char* path2)
+	std::shared_ptr<Simage> LoadSimage(std::string path, std::string path2)
 	{
-		char buf[256];
-		if(path2 == nullptr)
+		if(path2 == "")
 		{
-			strcpy(buf, path);
-			char* ext = strstr(buf, ".bmp");
-			strcpy(ext, "75.bmp");
+			path2 = path.replace(path.find_first_of(".bmp"), std::string::npos, "75.bmp");
 		}
-		else
-			strcpy(buf, path2);
 
 		std::shared_ptr<Simage> simage = std::make_shared<Simage>();
-		simage->image = LoadImage(path);
-		simage->image75 = LoadImage(buf);
+		simage->image = LoadImage(path.c_str());
+		simage->image75 = LoadImage(path2.c_str());
 
 		return simage;
 	}

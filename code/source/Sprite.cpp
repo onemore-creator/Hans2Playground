@@ -39,11 +39,21 @@ namespace Halib::Data
 
 		renderImage = useBig ? image : image75;
 		frameSize = renderImage->size / frameCount;
+		if(renderScale != 0)
+			scaledFrameSize = frameSize / std::abs(renderScale);
+		else
+			scaledFrameSize = 0;
+		imageOffset = activeFrame * frameSize;
 	}
 
 	short Sprite::GetScale()
 	{
 		return scale;
+	}
+
+	Vec2 Sprite::GetScaledFrameSize()
+	{
+		return scaledFrameSize;
 	}
 
 	void Sprite::IncrementAnimation(short amount)

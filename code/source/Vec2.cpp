@@ -60,6 +60,53 @@ namespace Halib::Data
 		return Vec2(x / other, y / other);
 	}
 
+	
+
+	void Vec2::operator+=(const Vec2& other)
+	{
+		x += other.x;
+		y += other.y;
+	}
+	void Vec2::operator-=(const Vec2& other)
+	{
+		x -= other.x;
+		y -= other.y;
+	}
+	void Vec2::operator*=(const Vec2& other)
+	{
+		x *= other.x;
+		y *= other.y;
+	}
+	void Vec2::operator/=(const Vec2& other)
+	{
+		x /= other.x;
+		y /= other.y;
+	}
+	
+	void Vec2::operator+=(const short& other)
+	{
+		x += other;
+		y += other;
+	}
+
+	void Vec2::operator-=(const short& other)
+	{
+		x -= other;
+		y -= other;
+	}
+
+	void Vec2::operator*=(const short& other)
+	{
+		x *= other;
+		y *= other;
+	}
+
+	void Vec2::operator/=(const short& other)
+	{
+		x /= other;
+		y /= other;
+	}
+
 	bool Vec2::operator==(const Vec2& other) const
 	{
 		return this->x == other.x && this->y == other.y;
@@ -94,6 +141,11 @@ namespace Halib::Data
 		short x = (1 - t) * a.x + t * b.x;
 		short y = (1 - t) * a.y + t * b.y;
 		return Vec2(x, y);
+	}
+
+	std::ostream& operator<<(std::ostream& os, const Vec2& vec)
+	{
+		return os << "(" << vec.x << ", " << vec.y << ")";
 	}
 	
 } // namespace Halib::Data

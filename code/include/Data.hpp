@@ -3,18 +3,19 @@
 #include "Image.hpp"
 #include "Simage.hpp"
 #include <memory>
+#include <string>
 
 namespace Halib::Data
 {
 	/// @brief Loads a bitmap image from the file system into RAM and returns a pointer to the loaded image. The image in RAM is always of the type R5G5B5A1
 	/// @param path the path to the file to load
 	/// @return A pointer to the loaded image data
-	std::shared_ptr<Image> LoadImage(const char* path);
+	std::shared_ptr<Image> LoadImage(std::string path);
 	/// @brief Loads a bitmap image from the file system into RAM, together with a smaller version of the image. The smaller version is assumed to be 75% the size of the original one. The smaller image's path is assumed to be the original image's name + "75", or can be explicitelly set
 	/// @param path The path to the file to load
 	/// @param path2 The path to the smaller image to load. L
 	/// @return A pointer to the loaded image data
-	std::shared_ptr<Simage> LoadSimage(const char* path, const char* path2 = nullptr);
+	std::shared_ptr<Simage> LoadSimage(std::string path1, std::string path2 = "");
 
 	/// @brief Creates a color from the given values
 	/// @param red Must be in range [0, 31]

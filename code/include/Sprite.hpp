@@ -26,6 +26,7 @@ namespace Halib::Data
 		short scale;
 
 		Vec2 frameSize;
+		Vec2 scaledFrameSize;
 		Vec2 imageOffset;
 		short renderScale;
 		std::shared_ptr<Image> renderImage;
@@ -38,6 +39,7 @@ namespace Halib::Data
 
 		void SetScale(short scale);
 		short GetScale();
+		Vec2 GetScaledFrameSize();
 
 		void IncrementAnimation(short amount);
 		void SetAnimation(short animationIndex, short animationLength);

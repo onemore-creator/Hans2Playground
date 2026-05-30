@@ -4,7 +4,6 @@
 #include "Data.hpp"
 #include <iostream>
 
-
 namespace Halib::System
 {
 	static float time1;
@@ -199,6 +198,14 @@ namespace Halib::System
 		Hall::SetRectangle(0, 0, Hall::SCREEN_WIDTH, Hall::SCREEN_HEIGHT);
 
 		Hall::Draw();
+	}
+
+	void Render(const std::shared_ptr<Data::Entity> entity)
+	{
+		Data::Vec2 position = entity->position;
+		position -= entity->sprite->GetScaledFrameSize() / 2;
+		std::cout << position << std::endl;
+		Render(entity->sprite, position.x, position.y);
 	}
 
 } // namespace Halib::System

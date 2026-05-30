@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <iostream>
 
 namespace Halib::Data
 {
@@ -13,21 +14,21 @@ namespace Halib::Data
 		Vec2 (short x, short);
 		Vec2 operator+(const Vec2& other) const;
 		Vec2 operator-(const Vec2& other) const;
-		
-		/// @brief Component wise multiplication!
-		/// @param other 
-		/// @return 
 		Vec2 operator*(const Vec2& other) const;
-		
-				/// @brief Component wise division!
-				/// @param other 
-				/// @return 
-				Vec2 operator/(const Vec2& other) const;
-
+		Vec2 operator/(const Vec2& other) const;
 		Vec2 operator+(const short& other) const;
 		Vec2 operator-(const short& other) const;
 		Vec2 operator*(const short& other) const;
 		Vec2 operator/(const short& other) const;
+
+		void operator+=(const Vec2& other);
+		void operator-=(const Vec2& other);
+		void operator*=(const Vec2& other);
+		void operator/=(const Vec2& other);
+		void operator+=(const short& other);
+		void operator-=(const short& other);
+		void operator*=(const short& other);
+		void operator/=(const short& other);
 
 		bool operator==(const Vec2& other) const;
 		bool operator!=(const Vec2& other) const;
@@ -43,4 +44,6 @@ namespace Halib::Data
 		/// @return 
 		static Vec2 Lerp(const Vec2& a, const Vec2& b, float t);
 	};
+
+	std::ostream& operator<<(std::ostream& os, const Vec2& vec);
 } // namespace Halib::Data

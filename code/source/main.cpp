@@ -6,6 +6,7 @@
 #include "System.hpp"
 #include "Data.hpp"
 #include "Sprite.hpp"
+#include "Entity.hpp"
 
 using namespace Halib;
 
@@ -26,14 +27,17 @@ int main()
 	System::Init();
 	Time::SetTargetFramerate(60);
 
-	auto image = Data::LoadImage("assets/byterLogo.bmp");
-	auto image75 = Data::LoadImage("assets/byterLogo75.bmp");
-	auto imageShroom = Data::LoadImage("assets/Mushroom-Run.bmp");
-	auto imageShroom75 = Data::LoadImage("assets/Mushroom-Run75.bmp");
+	auto image = Data::LoadImage(std::string("assets/byterLogo.bmp"));
+	auto image75 = Data::LoadImage(std::string("assets/byterLogo75.bmp"));
+	auto imageShroom = Data::LoadImage(std::string("assets/Mushroom-Run.bmp"));
+	auto imageShroom75 = Data::LoadImage(std::string("assets/Mushroom-Run75.bmp"));
 
 	auto sprite = std::make_shared<Data::Sprite>(image, image75, Data::Vec2(1));
 	auto spriteShroom = std::make_shared<Data::Sprite>(imageShroom, imageShroom75, Data::Vec2(8, 1));
-	
+	auto entity = std::make_shared<Data::Entity>();
+	entity->position = Data::Vec2(200, 60);
+	entity->sprite = spriteShroom;
+
 	//System::ShowCoolTitle(image, 140, 60);
 
 	int scale = -1;
@@ -41,31 +45,36 @@ int main()
 	int add = -1;
 	bool up = false;
 	bool down = false;
+	bool left = false;
+	bool right = false;
 	while(!Hall::ShouldClose())
 	{
 		subscale++;
 		if(subscale >= 10)
 		{
 			subscale = 0;
-			scale += add;
-			if(scale >= -1)
-				add *= -1;
-			else if(scale <= -15)
-				add *= -1;
+			spriteShroom->IncrementAnimation(1);
 		}
-
-		//TODO: Sprite and animation clash. The framesize and imageOffset need to be both updated when animating or changing the scale
 
 		auto cont = Hall::GetController(0);
 		bool newUp = Hall::GetUp(cont);
 		bool newDown = Hall::GetDown(cont);
+		bool newLeft = Hall::GetLeft(cont);
+		bool newRight = Hall::GetRight(cont);
+
 		if(!up && newUp)
 			spriteShroom->IncrementAnimation(1);
 		if(!down && newDown)
 			spriteShroom->IncrementAnimation(-1);
+		if(!left && newLeft)
+			scale--;
+		if(!right && newRight)
+			scale++;
 		
 		up = newUp;
 		down = newDown;
+		left = newLeft;
+		right = newRight;
 		
 		sprite->SetScale(scale);
 		spriteShroom->SetScale(scale);
@@ -73,7 +82,7 @@ int main()
 		System::Clear(Data::CreateColor(3, 3, 3, 1));
 		//System::Render(image, 100, 60, scale, scale);
 		System::Render(sprite, 20, 60);
-		System::Render(spriteShroom, 200, 60);
+		System::Render(entity);
 		//RENDER CODE END
 
 		//std::cout << Halib::Time::GetDeltaTime() << std::endl;

@@ -3,6 +3,7 @@
 #include "Image.hpp"
 #include "Simage.hpp"
 #include "Sprite.hpp"
+#include "Entity.hpp"
 
 namespace Halib::System
 {
@@ -20,6 +21,9 @@ namespace Halib::System
 
 	/// @brief Renders a sprite at the given position
 	void Render(const std::shared_ptr<Data::Sprite> sprite, short x, short y);
+
+	/// @brief Renders a sprite at the given position
+	void Render(const std::shared_ptr<Data::Entity> entity);
 
 	/// @brief Sets the whole screen to the given color
 	void Clear(Hall::Color color);
