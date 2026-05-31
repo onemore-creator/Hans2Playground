@@ -7,11 +7,11 @@
 struct Rect : CollidableEntity {
   Vec2 size;
 
-  // Exposed
+  // Public exposure
   float fallSpeed = 0.0f; // current downward velocity (px/s). Positive =
-                          // falling, negative = climbing.
+                          // falling, negative = climbing
   float angle = 0.0f; // nose angle in radians. 0 = level, positive = nose down,
-                      // negative = nose up.
+                      // negative = nose up
 
   Rect(Vec2 position, Vec2 size);
   Rect(Vec2 position, Vec2 size, std::string name);
