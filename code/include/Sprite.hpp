@@ -2,13 +2,13 @@
 #include "Image.hpp"
 #include "Vec2.hpp"
 
-namespace Halib::System
-{
+namespace Halib::System {
 void Render(const std::shared_ptr<Sprite> image, short x, short y);
 }
 
 class Sprite {
-  friend void Halib::System::Render(const std::shared_ptr<Sprite> image, short x, short y);
+  friend void Halib::System::Render(const std::shared_ptr<Sprite> image,
+                                    short x, short y);
 
   std::shared_ptr<Image> image;
   std::shared_ptr<Image> image75;
@@ -25,7 +25,8 @@ class Sprite {
   short animationLength;
 
 public:
-  Sprite(std::shared_ptr<Image> image, std::shared_ptr<Image> image75, Vec2 frameCount);
+  Sprite(std::shared_ptr<Image> image, std::shared_ptr<Image> image75,
+         Vec2 frameCount);
 
   void SetScale(short scale);
   short GetScale();

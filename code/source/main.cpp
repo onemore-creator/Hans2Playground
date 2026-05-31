@@ -37,8 +37,6 @@ int main() {
   InputManager inputManager;
 
   // points are the top left corner and then width + height
-  std::shared_ptr<Rect> player =
-      Entity::Create<Rect>(Vec2(20, 20), Vec2(14, 14), "Player 1");
 
   auto image = LoadImage(std::string("assets/byterLogo.bmp"));
   auto image75 = LoadImage(std::string("assets/byterLogo75.bmp"));
@@ -49,6 +47,8 @@ int main() {
   auto spriteShroom =
       std::make_shared<Sprite>(imageShroom, imageShroom75, Vec2(8, 1));
 
+  std::shared_ptr<Rect> player =
+      Entity::Create<Rect>(Vec2(20, 20), Vec2(14, 14), sprite, "Player 1");
   // std::shared_ptr<Entity> entity =
   //     Entity::Create<Rect>(Vec2(100, 100), Vec2(14, 14), "Player 1");
   // entity->position = Vec2(100, 100);

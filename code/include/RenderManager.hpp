@@ -3,6 +3,7 @@
 #include "Entity.hpp"
 #include "Hall/Video.h"
 #include "Rect.hpp"
+#include "System.hpp"
 #include <memory>
 struct RenderManager {
 
@@ -13,6 +14,8 @@ private:
     while (Hall::GetIsGPUBusy()) {
     }
     if (auto rect = std::dynamic_pointer_cast<Rect>(entity)) {
+
+      Halib::System::Render(entity);
       Hall::SetRectangle(rect->position.x, rect->position.y, rect->size.x,
                          rect->size.y);
       Hall::SetColorSource(Hall::COLOR);
