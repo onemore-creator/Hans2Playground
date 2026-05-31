@@ -14,8 +14,6 @@
 #include <iostream>
 #include <memory>
 
-using namespace Halib;
-
 #ifdef DESKTOP
 #include <filesystem>
 int main(int argc, char *argv[]) {
@@ -29,8 +27,8 @@ int main(int argc, char *argv[]) {
 int main() {
 #endif
   Hall::Init();
-  System::Init();
-  Time::SetTargetFramerate(60);
+  Init();
+  SetTargetFramerate(60);
 
   EntityManager entityManager;
   RenderManager renderManager;
@@ -58,7 +56,7 @@ int main() {
   // entityShroom->position = Vec2(260, 100);
   // entityShroom->sprite = spriteShroom;
 
-  // System::ShowCoolTitle(image, 140, 60);
+  // ShowCoolTitle(image, 140, 60);
 
   int scale = -1;
   int subscale = 0;
@@ -70,15 +68,15 @@ int main() {
 
   while (!Hall::ShouldClose()) {
 
-    System::Clear(CreateColor(0, 0, 0, 1));
+    Clear(CreateColor(0, 0, 0, 1));
     // RENDER CODE
     inputManager.Update();
     entityManager.Update();
     renderManager.Update();
     // RENDER CODE END
 
-    std::cout << Halib::Time::GetDeltaTime() << std::endl;
-    System::FinishFrame();
+    std::cout << GetDeltaTime() << std::endl;
+    FinishFrame();
   }
 
   return 0;

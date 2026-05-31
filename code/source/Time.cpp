@@ -1,48 +1,45 @@
 #include <Hall/Hall.h>
 #include "Time.hpp"
 
-namespace Halib::Time
+static unsigned long long startTime;
+static float timePerFrame;
+static float deltaTime = 1 / 60.0f;
+
+float ToSeconds(unsigned long long time)
 {
-	static unsigned long long startTime;
-	static float timePerFrame;
-	static float deltaTime = 1 / 60.0f;
+    return time / (float)Hall::SYSTEM_CLK_FREQUENCY;
+}
 
-    float ToSeconds(unsigned long long time)
-    {
-        return time / (float)Hall::SYSTEM_CLK_FREQUENCY;
-    }
+void TimeInit()
+{
+    startTime = Hall::GetSystemTime();
+}
 
-    void Init()
-    {
-        startTime = Hall::GetSystemTime();
-    }
+float GetTimeSinceStartup()
+{
+    unsigned long long duration = Hall::GetSystemTime() - startTime;
+    return ToSeconds(duration);
+}
 
-    float GetTimeSinceStartup()
-	{
-        unsigned long long duration = Hall::GetSystemTime() - startTime;
-        return ToSeconds(duration);
-    }
-
-    void SetTargetFramerate(int framerate)
-    {
-        timePerFrame = 1.0f / framerate;
+void SetTargetFramerate(int framerate)
+{
+    timePerFrame = 1.0f / framerate;
 #ifdef DESKTOP
-	    Hall::RaylibSetTargetFramerate(framerate);
+    Hall::RaylibSetTargetFramerate(framerate);
 #endif
-    }
+}
 
-    float GetTargetTimePerFrame()
-    {
-        return timePerFrame;
-    }
+float GetTargetTimePerFrame()
+{
+    return timePerFrame;
+}
 
-	void SetDeltaTime(float deltaTime)
-	{
-		Halib::Time::deltaTime = deltaTime;
-	}
+void SetDeltaTime(float deltaTime)
+{
+    ::deltaTime = deltaTime;
+}
 
-	float GetDeltaTime()
-	{
-		return deltaTime;
-	}
-} // Engine
+float GetDeltaTime()
+{
+    return deltaTime;
+}

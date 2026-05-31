@@ -20,20 +20,6 @@ std::shared_ptr<Image> LoadImage(std::string path)
 	return image;
 }
 
-std::shared_ptr<Simage> LoadSimage(std::string path, std::string path2)
-{
-	if(path2 == "")
-	{
-		path2 = path.replace(path.find_first_of(".bmp"), std::string::npos, "75.bmp");
-	}
-
-	std::shared_ptr<Simage> simage = std::make_shared<Simage>();
-	simage->image = LoadImage(path.c_str());
-	simage->image75 = LoadImage(path2.c_str());
-
-	return simage;
-}
-
 Hall::Color CreateColor(char red, char green, char blue, bool alpha)
 {
 	Hall::Color color = 0;

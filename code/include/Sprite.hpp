@@ -3,11 +3,11 @@
 #include "Vec2.hpp"
 
 struct Sprite;
-void Render(const std::shared_ptr<Data::Sprite> image, short x, short y);
+void Render(const std::shared_ptr<Sprite> image, short x, short y);
 
 class Sprite
 {
-	friend void Halib::System::Render(const std::shared_ptr<Data::Sprite> image, short x, short y);
+	friend void Render(const std::shared_ptr<Sprite> image, short x, short y);
 	std::shared_ptr<Image> image;
 	std::shared_ptr<Image> image75;
 	Vec2 frameCount;

@@ -47,7 +47,7 @@ void Rect::launch() {
 }
 
 void Rect::Update() {
-  float dt = Halib::Time::GetDeltaTime();
+  float dt = GetDeltaTime();
 
   if (!this->landed) {
     // ── Nose rotation ────────────────────────────────────────────────────────
