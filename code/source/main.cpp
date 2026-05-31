@@ -9,6 +9,7 @@
 #include "System.hpp"
 #include "Time.hpp"
 #include "Vec2.hpp"
+#include "LevelManager.hpp"
 #include <Hall/Hall.h>
 #include <cstdio>
 #include <iostream>
@@ -33,6 +34,7 @@ int main() {
   EntityManager entityManager;
   RenderManager renderManager;
   InputManager inputManager;
+  LevelManager levelManager;
 
   // points are the top left corner and then width + height
 
@@ -66,16 +68,23 @@ int main() {
   bool left = false;
   bool right = false;
 
+  levelManager.Init();
   while (!Hall::ShouldClose()) {
 
     Clear(CreateColor(0, 0, 0, 1));
     // RENDER CODE
     inputManager.Update();
-    entityManager.Update();
+    
+    if(!levelManager.GetIsLevelBuilding())
+      entityManager.Update();
+    levelManager.Update();
+
+    levelManager.Render();
     renderManager.Update();
     // RENDER CODE END
 
-    std::cout << GetDeltaTime() << std::endl;
+    if(!levelManager.GetIsLevelBuilding())
+      std::cout << GetDeltaTime() << std::endl;
     FinishFrame();
   }
 
