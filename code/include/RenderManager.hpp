@@ -15,7 +15,7 @@ private:
     while (Hall::GetIsGPUBusy()) {
     }
     if (auto rect = std::dynamic_pointer_cast<Rect>(entity)) {
-      camera.SetZoom(camera.GetZoom() - 0.1f);
+      // gameCamera.SetZoom(gameCamera.GetZoom() - 0.1f);
       Render(entity);
 
       Hall::SetRectangle(rect->position.x, rect->position.y, rect->size.x,
