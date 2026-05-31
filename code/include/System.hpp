@@ -5,7 +5,7 @@
 #include "Sprite.hpp"
 #include <memory>
 
-extern Camera camera;
+extern Camera gameCamera;
 
 void Init();
 void FinishFrame();

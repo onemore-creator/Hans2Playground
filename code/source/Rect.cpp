@@ -50,7 +50,7 @@ void Rect::Update() {
   float dt = GetDeltaTime();
 
   if (!this->landed) {
-    // ── Nose rotation ────────────────────────────────────────────────────────
+    // Nose rotation
     if (InputManager::GetButtonDown(0, Button::Up))
       this->angle -= this->rotateSpeed * dt;
     if (InputManager::GetButtonDown(0, Button::Down))
@@ -59,19 +59,19 @@ void Rect::Update() {
     this->angle =
         std::max(this->angleMin, std::min(this->angleMax, this->angle));
 
-    // ── Air resistance ───────────────────────────────────────────────────────
+    // Air resistance
     // F_drag = dragCoeff * v²  (opposes the full velocity vector)
     float speed = std::sqrt(this->vx * this->vx + this->vy * this->vy);
     float dragX = this->dragCoeff * speed * this->vx;
     float dragY = this->dragCoeff * speed * this->vy;
 
-    // ── Forces ───────────────────────────────────────────────────────────────
+    // Forces
     // Thrust is applied along the nose direction
     float forceX = this->thrustX * std::cos(this->angle) - dragX;
     float forceY = this->thrustX * std::sin(this->angle) +
                    this->weight * this->gravity - dragY;
 
-    // ── Integrate ────────────────────────────────────────────────────────────
+    //  Integrate
     this->vx += forceX * dt;
     this->vy += forceY * dt;
 
@@ -91,7 +91,7 @@ void Rect::Update() {
         this->vy = 0.0f;
     }
 
-    // Floor — land
+    // Floor land
     float floorY = Hall::SCREEN_HEIGHT - this->size.y - this->marginBottom;
     if (this->position.y >= floorY) {
       this->position.y = floorY;
