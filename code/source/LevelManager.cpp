@@ -2,6 +2,7 @@
 #include "Data.hpp"
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 
 namespace Halib
 {
