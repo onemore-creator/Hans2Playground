@@ -63,16 +63,11 @@ target_include_directories(${FINAL_TARGET}
 #███████████████████████████████████████████████████████████
 #███████████████████████████████████████████████████████████
 
+file(GLOB sources "source/*.cpp" "source/*.c")
 
 target_sources(${FINAL_TARGET} PUBLIC
   # Add your .cpp files here
-  "source/main.cpp"
-  "source/Time.cpp"
-  "source/System.cpp"
-  "source/Data.cpp"
-  "source/Image.cpp"
-  
-  "source/bmpread.c"
+  ${sources}
 )
 
 # This is stuff for debugging the hardware. Just ignore it :)

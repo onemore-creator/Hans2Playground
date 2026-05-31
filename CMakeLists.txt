@@ -60,6 +60,7 @@ if(NOT DESKTOPBUILD)
 	  -Bstatic
 	  -nostdlib
 	  -fno-builtin
+    -fuse-ld=lld
 	)
 endif()
 
