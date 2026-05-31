@@ -2,36 +2,38 @@
 #include "Image.hpp"
 #include "Vec2.hpp"
 
-namespace Halib::System {
-void Render(const std::shared_ptr<Sprite> image, short x, short y);
-}
 
-class Sprite {
-  friend void Halib::System::Render(const std::shared_ptr<Sprite> image,
-                                    short x, short y);
+struct Sprite;
+void Render(const std::shared_ptr<Data::Sprite> image, short x, short y);
 
-  std::shared_ptr<Image> image;
-  std::shared_ptr<Image> image75;
-  Vec2 frameCount;
-  Vec2 activeFrame;
-  short scale;
 
-  Vec2 frameSize;
-  Vec2 scaledFrameSize;
-  Vec2 imageOffset;
-  short renderScale;
-  std::shared_ptr<Image> renderImage;
+class Sprite
+	{
+		friend void Halib::System::Render(const std::shared_ptr<Data::Sprite> image, short x, short y); 	
+		std::shared_ptr<Image> image;
+		std::shared_ptr<Image> image75;
+		Vec2 frameCount;
+		Vec2 activeFrame;
+		short scale;
 
-  short animationLength;
+		Vec2 frameSize;
+		Vec2 scaledFrameSize;
+		Vec2 imageOffset;
+		short renderScale;
+		std::shared_ptr<Image> renderImage;
 
-public:
-  Sprite(std::shared_ptr<Image> image, std::shared_ptr<Image> image75,
-         Vec2 frameCount);
+		short animationLength;
 
-  void SetScale(short scale);
-  short GetScale();
-  Vec2 GetScaledFrameSize();
+		public:
+		
+		Sprite(std::shared_ptr<Image> image, std::shared_ptr<Image> image75, Vec2 frameCount);
 
-  void IncrementAnimation(short amount);
-  void SetAnimation(short animationIndex, short animationLength);
-};
+		void SetScale(short scale);
+		void SetActiveFrame(Vec2 frame);
+		short GetScale();
+		Vec2 GetScaledFrameSize();
+		Vec2 GetFrameCount();
+
+		void IncrementAnimation(short amount);
+		void SetAnimation(short animationIndex, short animationLength);
+	};
