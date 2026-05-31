@@ -66,7 +66,6 @@ target_include_directories(${FINAL_TARGET}
 file(GLOB sources "source/*.cpp" "source/*.c")
 
 target_sources(${FINAL_TARGET} PUBLIC
-  # Add your .cpp files here
   ${sources}
 )
 

@@ -2,76 +2,85 @@
 #include "bmpread.h"
 #include <iostream>
 
-namespace Halib::Data
+std::shared_ptr<Image> LoadImage(std::string path)
 {
-	std::shared_ptr<Image> LoadImage(const char* path)
+	bmpread_t bmp;
+	int result = bmpread(path.c_str(), BMPREAD_TOP_DOWN | BMPREAD_ANY_SIZE | BMPREAD_ALPHA | BMPREAD_BYTE_ALIGN, &bmp);
+	if(!result)
 	{
-		bmpread_t bmp;
-		int result = bmpread(path, BMPREAD_TOP_DOWN | BMPREAD_ANY_SIZE | BMPREAD_ALPHA | BMPREAD_BYTE_ALIGN, &bmp);
-		if(!result)
-		{
-			std::cerr << "COULD NOT LOAD ASSET \"" << path << "\". Idk why, though..." << std::endl;
-		}
-		std::unique_ptr<Hall::Color[]> data((Hall::Color*)bmp.data);
-		
-		std::shared_ptr<Image> image = std::make_shared<Image>();
-		image->SetData(std::move(data));
-		image->width = bmp.width;
-		image->height = bmp.height;
-		//bmpread_free(&bmp); //We don't call free anymore because that would delete the loaded data
+		std::cerr << "COULD NOT LOAD ASSET \"" << path << "\". Idk why, though..." << std::endl;
+	}
+	std::unique_ptr<Hall::Color[]> data((Hall::Color*)bmp.data);
 
-		return image;
+	std::shared_ptr<Image> image = std::make_shared<Image>();
+	image->SetData(std::move(data));
+	image->size.x = bmp.width;
+	image->size.y = bmp.height;
+
+	return image;
+}
+
+std::shared_ptr<Simage> LoadSimage(std::string path, std::string path2)
+{
+	if(path2 == "")
+	{
+		path2 = path.replace(path.find_first_of(".bmp"), std::string::npos, "75.bmp");
 	}
 
-	Hall::Color CreateColor(char red, char green, char blue, bool alpha)
-	{
-		Hall::Color color = 0;
-		color = SetRed(color, red);
-		color = SetGreen(color, green);
-		color = SetBlue(color, blue);
-		color = SetAlpha(color, alpha);
-		return color;
-	}
+	std::shared_ptr<Simage> simage = std::make_shared<Simage>();
+	simage->image = LoadImage(path.c_str());
+	simage->image75 = LoadImage(path2.c_str());
 
-	Hall::Color SetRed(Hall::Color color, char red)
-	{
-		return (color & 0b0000011111111111) | (((unsigned short)red & 0b11111) << 11);
-	}
+	return simage;
+}
 
-	Hall::Color SetGreen(Hall::Color color, char green)
-	{
-		return (color & 0b1111100000111111) | (((unsigned short)green & 0b11111) << 6);
-	}
+Hall::Color CreateColor(char red, char green, char blue, bool alpha)
+{
+	Hall::Color color = 0;
+	color = SetRed(color, red);
+	color = SetGreen(color, green);
+	color = SetBlue(color, blue);
+	color = SetAlpha(color, alpha);
+	return color;
+}
 
-	Hall::Color SetBlue(Hall::Color color, char blue)
-	{
-		return (color & 0b1111111111000001) | (((unsigned short)blue & 0b11111) << 1);
-	}
+Hall::Color SetRed(Hall::Color color, char red)
+{
+	return (color & 0b0000011111111111) | (((unsigned short)red & 0b11111) << 11);
+}
 
-	Hall::Color SetAlpha(Hall::Color color, bool alpha)
-	{
-		unsigned short alphaVal = alpha ? 1 : 0;
-		return (color & 0b1111111111111110) | alphaVal;
-	}
+Hall::Color SetGreen(Hall::Color color, char green)
+{
+	return (color & 0b1111100000111111) | (((unsigned short)green & 0b11111) << 6);
+}
 
-	char GetRed(Hall::Color color)
-	{
-		return (color >> 11) & 0b11111;
-	}
+Hall::Color SetBlue(Hall::Color color, char blue)
+{
+	return (color & 0b1111111111000001) | (((unsigned short)blue & 0b11111) << 1);
+}
 
-	char GetGreen(Hall::Color color)
-	{
-		return (color >> 6) & 0b11111;
-	}
+Hall::Color SetAlpha(Hall::Color color, bool alpha)
+{
+	unsigned short alphaVal = alpha ? 1 : 0;
+	return (color & 0b1111111111111110) | alphaVal;
+}
 
-	char GetBlue(Hall::Color color)
-	{
-		return (color >> 1) & 0b11111;
-	}
+char GetRed(Hall::Color color)
+{
+	return (color >> 11) & 0b11111;
+}
 
-	bool GetAlpha(Hall::Color color)
-	{
-		return color & 0b1;
-	}
+char GetGreen(Hall::Color color)
+{
+	return (color >> 6) & 0b11111;
+}
 
-} // namespace Halib::Data
+char GetBlue(Hall::Color color)
+{
+	return (color >> 1) & 0b11111;
+}
+
+bool GetAlpha(Hall::Color color)
+{
+	return color & 0b1;
+}

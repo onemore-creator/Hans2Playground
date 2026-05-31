@@ -2,6 +2,7 @@
 
 #include "Entity.hpp"
 #include "Vec2.hpp"
+
 struct CollidableEntity : Entity {
 
   struct bbox {

@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdio>
+#include <memory>
 #include <string>
 
 Rect::Rect(Vec2 position, Vec2 size) {
@@ -21,6 +22,14 @@ Rect::Rect(Vec2 position, Vec2 size, std::string name) {
   launch();
 }
 
+Rect::Rect(Vec2 position, Vec2 size, std::shared_ptr<Sprite> sprite,
+           std::string name) {
+  this->launchPosition = position;
+  this->size = size;
+  this->name = name;
+  this->sprite = sprite;
+  launch();
+}
 Rect::Rect() {
   this->position = Vec2();
   this->launchPosition = Vec2();
@@ -47,7 +56,8 @@ void Rect::Update() {
     if (InputManager::GetButtonDown(0, Button::Down))
       this->angle += this->rotateSpeed * dt;
 
-    this->angle = std::max(this->angleMin, std::min(this->angleMax, this->angle));
+    this->angle =
+        std::max(this->angleMin, std::min(this->angleMax, this->angle));
 
     // ── Air resistance ───────────────────────────────────────────────────────
     // F_drag = dragCoeff * v²  (opposes the full velocity vector)
@@ -58,7 +68,8 @@ void Rect::Update() {
     // ── Forces ───────────────────────────────────────────────────────────────
     // Thrust is applied along the nose direction
     float forceX = this->thrustX * std::cos(this->angle) - dragX;
-    float forceY = this->thrustX * std::sin(this->angle) + this->weight * this->gravity - dragY;
+    float forceY = this->thrustX * std::sin(this->angle) +
+                   this->weight * this->gravity - dragY;
 
     // ── Integrate ────────────────────────────────────────────────────────────
     this->vx += forceX * dt;

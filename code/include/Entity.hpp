@@ -8,7 +8,7 @@
 
 struct Entity {
   Vec2 position;
-  Sprite sprite;
+  std::shared_ptr<Sprite> sprite;
   bool isActive;
   std::string name;
 
