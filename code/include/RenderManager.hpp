@@ -15,7 +15,7 @@ private:
     }
     if (auto rect = std::dynamic_pointer_cast<Rect>(entity)) {
 
-      Halib::System::Render(entity);
+      Render(entity);
       Hall::SetRectangle(rect->position.x, rect->position.y, rect->size.x,
                          rect->size.y);
       Hall::SetColorSource(Hall::COLOR);

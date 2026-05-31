@@ -9,7 +9,7 @@ namespace Halib
 	{
 		struct BackgroundData
 		{
-			std::shared_ptr<Data::Sprite> tileset;
+			std::shared_ptr<Sprite> tileset;
 			std::vector<std::vector<int>> tilemap;
 		};
 

@@ -6,17 +6,14 @@
 struct Image;
 struct Sprite;
 
-namespace Halib::System
-{
-	void Render(const std::shared_ptr<Image> image, short x, short y, short xScale, short yScale);
-	void Render(const std::shared_ptr<Sprite> sprite, short x, short y);
-}
+void Render(const std::shared_ptr<Image> image, short x, short y, short xScale, short yScale);
+void Render(const std::shared_ptr<Sprite> sprite, short x, short y);
 
 /// @brief A datatype that holds an R5G5B5A1 image
 struct Image
 {
-	friend void Halib::System::Render(const std::shared_ptr<Image> image, short x, short y, short xScale, short yScale);
-	friend void Halib::System::Render(const std::shared_ptr<Sprite> sprite, short x, short y);
+	friend void Render(const std::shared_ptr<Image> image, short x, short y, short xScale, short yScale);
+	friend void Render(const std::shared_ptr<Sprite> sprite, short x, short y);
 
 	Vec2 size;
 
