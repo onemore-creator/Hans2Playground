@@ -53,12 +53,12 @@ namespace Halib
 		std::vector<std::string> line = Split(str, ";");
 		std::string tilesetPath = line[0];
 
-		auto bgimage = Data::LoadImage(std::string(tilesetPath));
+		auto bgimage = LoadImage(std::string(tilesetPath));
 		tilesetPath.replace(tilesetPath.find(".bmp"), std::string::npos, "75.bmp");
-		auto bgimage75 = Data::LoadImage(std::string(tilesetPath));
-		Data::Vec2 frameCount = Data::Vec2(std::stoi(line[1]), std::stoi(line[2]));
+		auto bgimage75 = LoadImage(std::string(tilesetPath));
+		Vec2 frameCount = Vec2(std::stoi(line[1]), std::stoi(line[2]));
 
-		bgData.tileset = std::make_shared<Data::Sprite>(bgimage, bgimage75, frameCount);
+		bgData.tileset = std::make_shared<Sprite>(bgimage, bgimage75, frameCount);
 		
 		
 		while(std::getline(bgFile, str))
@@ -74,17 +74,17 @@ namespace Halib
 
 	void LevelManager::Render()
 	{
-		Data::Vec2 tileSize = bgData.tileset->GetScaledFrameSize();
-		Data::Vec2 position{ 0, static_cast<short>(Hall::SCREEN_HEIGHT - tileSize.y) };
+		Vec2 tileSize = bgData.tileset->GetScaledFrameSize();
+		Vec2 position{ 0, static_cast<short>(Hall::SCREEN_HEIGHT - tileSize.y) };
 
 		for(const auto& column : bgData.tilemap)
 		{
 			for(int tile : column)
 			{
 				int frameCountX = bgData.tileset->GetFrameCount().x;
-				Data::Vec2 frame = Data::Vec2(tile % frameCountX, tile % frameCountX);
+				Vec2 frame = Vec2(tile % frameCountX, tile % frameCountX);
 				bgData.tileset->SetActiveFrame(frame);
-				System::Render(bgData.tileset, position.x, position.y);
+				::Render(bgData.tileset, position.x, position.y);
 				position.y -= tileSize.y;
 			}
 			
