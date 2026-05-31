@@ -167,4 +167,18 @@ void Player::Update() {
     else
       flapAction.apply(vx, vy, pitch);
   }
+
+  if (pitch > 0.1 && currentAnimation != 2) {
+    sprite->SetAnimation(2, 30);
+    currentAnimation = 2;
+  }
+  if (pitch < -0.1 && currentAnimation != 3) {
+    sprite->SetAnimation(3, 30);
+    currentAnimation = 3;
+  }
+  if (pitch < 0.1 && pitch > -0.1 && currentAnimation != 1) {
+    sprite->SetAnimation(1, 30);
+    currentAnimation = 1;
+  }
+  sprite->IncrementAnimation(1);
 }

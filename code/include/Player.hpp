@@ -87,5 +87,7 @@ private:
   float vx = 0.0f;
   float vy = 0.0f;
 
+  int currentAnimation = 1;
+
   void launch();
 };
