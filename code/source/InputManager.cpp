@@ -30,6 +30,18 @@ bool InputManager::GetButtonDown(int id, Button btn) {
   }
 }
 
+bool InputManager::GetButton(int id, Button btn) {
+  int b = static_cast<int>(btn);
+  switch (id) {
+  case 0:
+    return (state0 & (1 << b));
+  case 1:
+    return (state1 & (1 << b));
+  default:
+    return false;
+  }
+}
+
 void InputManager::Update() {
   oldState0 = state0;
   oldState1 = state1;
