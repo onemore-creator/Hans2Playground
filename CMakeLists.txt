@@ -28,7 +28,7 @@ endif()
 
 include(FetchContent)
 FetchContent_Declare(Hall
-	GIT_REPOSITORY "https://github.com/Byter64/Hall"
+	GIT_REPOSITORY "https://github.com/InnocentusLime/hans-hal"
 	GIT_TAG main
 )
 FetchContent_MakeAvailable(Hall)

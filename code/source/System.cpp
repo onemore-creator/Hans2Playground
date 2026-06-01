@@ -94,17 +94,6 @@ void Render(const std::shared_ptr<Image> image, short x, short y, short xScale,
     ;
 
   Hall::SetImage(data, image->size.x, image->size.y);
-#ifdef DESKTOP
-  if (image->wasDataRequested) {
-    Hall::UpdateRaylibTexture((Hall::Color *)image->GetData(), image->size.x,
-                              image->size.y);
-  } else if (image->wasDataSet) {
-    Hall::UpdateRaylibTexture((Hall::Color *)image->GetData(), image->size.x,
-                              image->size.y);
-    image->wasDataSet = false;
-    image->wasDataRequested = false;
-  }
-#endif
   Hall::SetColorTable(Hall::CTType::NONE);
   Hall::SetColorSource(Hall::MEMORY);
   Hall::SetExcerpt(0, 0, image->size.x, image->size.y);
@@ -125,17 +114,6 @@ void Render(const std::shared_ptr<Sprite> sprite, short x, short y) {
     ;
 
   Hall::SetImage(data, image->size.x, image->size.y);
-#ifdef DESKTOP
-  if (image->wasDataRequested) {
-    Hall::UpdateRaylibTexture((Hall::Color *)image->GetData(), image->size.x,
-                              image->size.y);
-  } else if (image->wasDataSet) {
-    Hall::UpdateRaylibTexture((Hall::Color *)image->GetData(), image->size.x,
-                              image->size.y);
-    image->wasDataSet = false;
-    image->wasDataRequested = false;
-  }
-#endif
   Hall::SetColorTable(Hall::CTType::NONE);
   Hall::SetColorSource(Hall::MEMORY);
   Hall::SetExcerpt(sprite->imageOffset.x, sprite->imageOffset.y,
