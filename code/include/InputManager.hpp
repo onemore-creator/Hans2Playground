@@ -28,6 +28,7 @@ struct InputManager {
   static void Update();
   static bool GetButtonUp(int id, Button btn);
   static bool GetButtonDown(int id, Button btn);
+  static bool GetButton(int id, Button btn);
   static bool GetAnyButtonDown(int id);
   static bool GetAnyButtonUp(int id);
 };

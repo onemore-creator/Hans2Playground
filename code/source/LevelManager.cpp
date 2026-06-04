@@ -2,6 +2,7 @@
 #include "Data.hpp"
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 
 /// @brief Splits the given string by the given delimiter. The delimiter will not be contained in any of the resulting substrings
 /// @param str
