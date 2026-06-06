@@ -12,7 +12,7 @@ Sprite::Sprite(std::shared_ptr<Image> image, std::shared_ptr<Image> image75, Vec
 	imageOffset = Vec2(0);
 	renderScale = 1;
 	renderImage = image;
-	animationLength = image->size.y;
+	animationLength = frameCount.x;
 }
 
 void Sprite::SetScale(short scale)
