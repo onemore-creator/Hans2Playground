@@ -1,5 +1,7 @@
 #include "LevelManager.hpp"
+#include "RenderManager.hpp"
 #include "Data.hpp"
+#include "Selector.hpp"
 #include <fstream>
 #include <sstream>
 #include <algorithm>
@@ -78,7 +80,11 @@ void LevelManager::Init()
 		bgData.tilemap.push_back(column);
 	}
 
-	selector = LoadSprite("assets/level/selector.bmp", Vec2(2, 1));
+	selector = Entity::Create<Selector>(Vec2(160, Hall::SCREEN_HEIGHT - 160), LoadSprite("assets/level/selector.bmp", Vec2(2, 1)), "Selector");
+	selector->isActive = false;
+	//We need to update selector in the level manager
+	EntityManager::Unregister(selector);
+	RenderManager::ChangeRenderLayer(selector, INT16_MAX);
 }
 
 void LevelManager::Update()
@@ -86,29 +92,13 @@ void LevelManager::Update()
 	BuildCodeChecker();	
 	if(!isLevelBuilding) return;
 
-	Vec2 selectorDelta{0};
-	if(InputManager::GetButtonDown(0, Button::Right)) selectorDelta.x++;
-	if(InputManager::GetButtonDown(0, Button::Left)) selectorDelta.x--;
-	if(InputManager::GetButtonDown(0, Button::Down)) selectorDelta.y++;
-	if(InputManager::GetButtonDown(0, Button::Up)) selectorDelta.y--;
-	
-	selectorDelta *= tileSize;
-	selectorPos += selectorDelta;
-
-	selectorAnimCounter++;
-	if(selectorAnimCounter >= 30)
-	{
-		selector->IncrementAnimation(1);
-		selectorAnimCounter = 0;
-	}
-
-	if(InputManager::GetButtonDown(0, Button::L)) mode = mode == Mode::ADD ? Mode::NONE : Mode::ADD;
-	if(InputManager::GetButtonDown(0, Button::R)) mode = mode == Mode::DELETE ? Mode::NONE : Mode::DELETE;
+	selector->Update();
 
 }
 
 void LevelManager::Render()
 {
+	//TODO: Handle this through the RenderManager
 	Vec2 tileSize = bgData.tileset->GetScaledFrameSize();
 	Vec2 position{0, static_cast<short>(Hall::SCREEN_HEIGHT - tileSize.y)};
 
@@ -130,21 +120,17 @@ void LevelManager::Render()
 	}
 }
 
-void LevelManager::LateRender()
-{
-	if(!isLevelBuilding) return;
-	::Render(selector, selectorPos.x, selectorPos.y);
-}
-
 void LevelManager::EnableLevelBuilder()
 {
 	isLevelBuilding = true;
+	selector->isActive = true;
 	std::cout << "Entered level build mode" << std::endl;
 }
 
 void LevelManager::DisableLevelBuilder()
 {
 	isLevelBuilding = false;
+	selector->isActive = false;
 }
 
 bool LevelManager::GetIsLevelBuilding()

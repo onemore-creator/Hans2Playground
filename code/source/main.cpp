@@ -62,7 +62,6 @@ int main() {
 
     levelManager.Render();
     renderManager.Render();
-    levelManager.LateRender();
 
     if(!levelManager.GetIsLevelBuilding())
       std::cout << GetDeltaTime() << std::endl;

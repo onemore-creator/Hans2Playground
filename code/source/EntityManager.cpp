@@ -18,7 +18,8 @@ void EntityManager::Unregister(std::shared_ptr<Entity> entity) {
 
 void EntityManager::Update() {
   for (const std::shared_ptr<Entity> e : entities) {
-    printf("position of the %s is (x: %d y: %d)\n", e->name.c_str(),
+    if(!e->isActive) continue;
+    printf("position of %s is (x: %d y: %d)\n", e->name.c_str(),
            e->position.x, e->position.y);
     e->Update();
   }
