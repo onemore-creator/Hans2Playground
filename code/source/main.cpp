@@ -54,15 +54,16 @@ int main() {
   levelManager.Init();
   while (!Hall::ShouldClose()) {
     Render(background, 0, 0);
-    // RENDER CODE
     inputManager.Update();
     
     if(!levelManager.GetIsLevelBuilding())
       entityManager.Update();
     levelManager.Update();
-
+    
+    // RENDER CODE
     levelManager.Render();
     renderManager.Update();
+    levelManager.LateRender();
     // RENDER CODE END
 
     if(!levelManager.GetIsLevelBuilding())

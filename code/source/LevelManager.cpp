@@ -4,6 +4,13 @@
 #include <sstream>
 #include <algorithm>
 
+static std::shared_ptr<Sprite> LoadSprite(std::string path, Vec2 frameCount)
+{
+	auto image1 = LoadImage(path);
+	auto image2 = LoadImage(path.replace(path.find(".bmp"), std::string::npos, "75.bmp"));
+	return std::make_shared<Sprite>(image1, image2, frameCount);
+}
+
 /// @brief Splits the given string by the given delimiter. The delimiter will not be contained in any of the resulting substrings
 /// @param str
 /// @param delimiter
@@ -70,6 +77,8 @@ void LevelManager::Init()
 
 		bgData.tilemap.push_back(column);
 	}
+
+	selector = LoadSprite("assets/level/selector.bmp", Vec2(2, 1));
 }
 
 void LevelManager::Update()
@@ -77,7 +86,25 @@ void LevelManager::Update()
 	BuildCodeChecker();	
 	if(!isLevelBuilding) return;
 
-	//start writing the level editor
+	Vec2 selectorDelta{0};
+	if(InputManager::GetButtonDown(0, Button::Right)) selectorDelta.x++;
+	if(InputManager::GetButtonDown(0, Button::Left)) selectorDelta.x--;
+	if(InputManager::GetButtonDown(0, Button::Down)) selectorDelta.y++;
+	if(InputManager::GetButtonDown(0, Button::Up)) selectorDelta.y--;
+	
+	selectorDelta *= tileSize;
+	selectorPos += selectorDelta;
+
+	selectorAnimCounter++;
+	if(selectorAnimCounter >= 30)
+	{
+		selector->IncrementAnimation(1);
+		selectorAnimCounter = 0;
+	}
+
+	if(InputManager::GetButtonDown(0, Button::L)) mode = mode == Mode::ADD ? Mode::NONE : Mode::ADD;
+	if(InputManager::GetButtonDown(0, Button::R)) mode = mode == Mode::DELETE ? Mode::NONE : Mode::DELETE;
+
 }
 
 void LevelManager::Render()
@@ -101,6 +128,12 @@ void LevelManager::Render()
 		if (position.x + tileSize.x > Hall::SCREEN_WIDTH)
 			break;
 	}
+}
+
+void LevelManager::LateRender()
+{
+	if(!isLevelBuilding) return;
+	::Render(selector, selectorPos.x, selectorPos.y);
 }
 
 void LevelManager::EnableLevelBuilder()
