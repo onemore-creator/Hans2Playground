@@ -59,12 +59,10 @@ int main() {
     if(!levelManager.GetIsLevelBuilding())
       entityManager.Update();
     levelManager.Update();
-    
-    // RENDER CODE
+
     levelManager.Render();
-    renderManager.Update();
+    renderManager.Render();
     levelManager.LateRender();
-    // RENDER CODE END
 
     if(!levelManager.GetIsLevelBuilding())
       std::cout << GetDeltaTime() << std::endl;
