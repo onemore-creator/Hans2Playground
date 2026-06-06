@@ -28,11 +28,12 @@ class LevelManager
 	//Level editing variables - START
 	int selectorAnimCounter = 0;
 	std::shared_ptr<Sprite> selector;
+	//std::shared_ptr<Sprite> selector;
+	//std::shared_ptr<Sprite> selector;
 	Vec2 selectorPos{160, Hall::SCREEN_HEIGHT - 160};
 	const Vec2 tileSize{32};
 	int activeItemIndex = 0;
 	Mode mode = Mode::NONE;
-
 	//Level editing variables - END
 
 	void BuildCodeChecker();
