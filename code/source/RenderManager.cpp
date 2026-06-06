@@ -12,6 +12,7 @@ void RenderManager::Render() {
   {
     for(std::shared_ptr<Entity> entity : pair.second)
     {
+      if(!entity->isActive) continue;
       DrawSprite(entity);
     }
   }

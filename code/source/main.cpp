@@ -10,6 +10,7 @@
 #include "System.hpp"
 #include "Time.hpp"
 #include "Vec2.hpp"
+#include "LevelManager.hpp"
 #include <Hall/Hall.h>
 #include <cstdio>
 #include <iostream>
@@ -34,6 +35,7 @@ int main() {
   EntityManager entityManager;
   RenderManager renderManager;
   InputManager inputManager;
+  LevelManager levelManager;
 
   // points are the top left corner and then width + height
 
@@ -49,13 +51,20 @@ int main() {
   std::shared_ptr<Player> player =
       Entity::Create<Player>(Vec2(20, 20), Vec2(14, 14), sprite, "Player 1");
 
+  levelManager.Init();
   while (!Hall::ShouldClose()) {
     Render(background, 0, 0);
     inputManager.Update();
-    entityManager.Update();
+    
+    if(!levelManager.GetIsLevelBuilding())
+      entityManager.Update();
+    levelManager.Update();
+
+    levelManager.Render();
     renderManager.Render();
 
-    std::cout << GetDeltaTime() << std::endl;
+    if(!levelManager.GetIsLevelBuilding())
+      std::cout << GetDeltaTime() << std::endl;
     FinishFrame();
   }
 

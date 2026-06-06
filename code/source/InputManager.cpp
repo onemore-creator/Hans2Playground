@@ -42,6 +42,30 @@ bool InputManager::GetButton(int id, Button btn) {
   }
 }
 
+bool InputManager::GetAnyButtonDown(int id)
+{
+  switch (id) {
+  case 0:
+    return ~oldState0 & state0;
+  case 1:
+    return ~oldState1 & state1;
+  default:
+    return false;
+  }
+}
+
+bool InputManager::GetAnyButtonUp(int id)
+{
+  switch (id) {
+  case 0:
+    return oldState0 & ~state0;
+  case 1:
+    return oldState1 & ~state1;
+  default:
+    return false;
+  }
+}
+
 void InputManager::Update() {
   oldState0 = state0;
   oldState1 = state1;
