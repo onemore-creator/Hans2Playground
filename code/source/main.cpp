@@ -51,11 +51,9 @@ int main() {
 
   while (!Hall::ShouldClose()) {
     Render(background, 0, 0);
-    // RENDER CODE
     inputManager.Update();
     entityManager.Update();
-    renderManager.Update();
-    // RENDER CODE END
+    renderManager.Render();
 
     std::cout << GetDeltaTime() << std::endl;
     FinishFrame();

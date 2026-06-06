@@ -1,5 +1,6 @@
 #include "EntityManager.hpp"
 #include "Entity.hpp"
+#include "RenderManager.hpp"
 #include <cstdio>
 #include <memory>
 
@@ -7,6 +8,12 @@ std::set<std::shared_ptr<Entity>> EntityManager::entities;
 
 void EntityManager::Register(std::shared_ptr<Entity> entity) {
   entities.insert(entity);
+  RenderManager::RegisterEntity(entity, 0);
+}
+
+void EntityManager::Unregister(std::shared_ptr<Entity> entity) {
+  entities.erase(entity);
+  RenderManager::UnregisterEntity(entity);
 }
 
 void EntityManager::Update() {
