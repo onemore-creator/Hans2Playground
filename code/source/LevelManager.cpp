@@ -6,13 +6,6 @@
 #include <sstream>
 #include <algorithm>
 
-static std::shared_ptr<Sprite> LoadSprite(std::string path, Vec2 frameCount)
-{
-	auto image1 = LoadImage(path);
-	auto image2 = LoadImage(path.replace(path.find(".bmp"), std::string::npos, "75.bmp"));
-	return std::make_shared<Sprite>(image1, image2, frameCount);
-}
-
 /// @brief Splits the given string by the given delimiter. The delimiter will not be contained in any of the resulting substrings
 /// @param str
 /// @param delimiter
@@ -80,7 +73,7 @@ void LevelManager::Init()
 		bgData.tilemap.push_back(column);
 	}
 
-	selector = Entity::Create<Selector>(Vec2(160, Hall::SCREEN_HEIGHT - 160), LoadSprite("assets/level/selector.bmp", Vec2(2, 1)), "Selector");
+	selector = Entity::Create<Selector>(Vec2(160, Hall::SCREEN_HEIGHT - 160), "Selector");
 	selector->isActive = false;
 	//We need to update selector in the level manager
 	EntityManager::Unregister(selector);
@@ -124,6 +117,7 @@ void LevelManager::EnableLevelBuilder()
 {
 	isLevelBuilding = true;
 	selector->isActive = true;
+	selector->SetUIVisibility(true);
 	std::cout << "Entered level build mode" << std::endl;
 }
 
@@ -131,6 +125,7 @@ void LevelManager::DisableLevelBuilder()
 {
 	isLevelBuilding = false;
 	selector->isActive = false;
+	selector->SetUIVisibility(false);
 }
 
 bool LevelManager::GetIsLevelBuilding()

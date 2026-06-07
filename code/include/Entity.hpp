@@ -7,9 +7,9 @@
 #include <string>
 
 struct Entity {
-  Vec2 position;
+  Vec2 position = Vec2(0);
   std::shared_ptr<Sprite> sprite;
-  bool isActive;
+  bool isActive = true;
   std::string name;
 
   template <class T, class... Args>
@@ -21,6 +21,9 @@ struct Entity {
     return entity_ptr;
   }
 
+  Entity() = default;
+  Entity(Vec2 position, std::shared_ptr<Sprite> sprite, std::string name);
+
   // Is called each game tick
-  virtual void Update() = 0;
+  virtual void Update();
 };

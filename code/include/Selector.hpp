@@ -10,10 +10,15 @@ class Selector : public Entity
 		DELETE
 	};
 	
-	void Update() override;
 	short animCounter = 0;
 	Mode mode = Mode::NONE;
+	std::shared_ptr<Entity> lButton;
+	std::shared_ptr<Entity> rButton;
+	std::shared_ptr<Entity> eraser;
+	std::shared_ptr<Entity> pencil;
 	
 	public:
-	Selector(Vec2 position, std::shared_ptr<Sprite> sprite, std::string name = "Selector");
+	void Update() override;
+	Selector(Vec2 position, std::string name = "Selector");
+	void SetUIVisibility(bool isVisible);
 };

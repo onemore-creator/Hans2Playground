@@ -1,5 +1,5 @@
 #pragma once
-#include "Entity.hpp"
+#include "Selector.hpp"
 #include <memory>
 #include <vector>
 #include "InputManager.hpp"
@@ -20,7 +20,7 @@ class LevelManager
 
 	//Level editing variables - START
 	int selectorAnimCounter = 0;
-	std::shared_ptr<Entity> selector;
+	std::shared_ptr<Selector> selector;
 	//std::shared_ptr<Sprite> selector;
 	//std::shared_ptr<Sprite> selector;
 	const Vec2 tileSize{32};

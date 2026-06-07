@@ -9,6 +9,8 @@
 /// @return A pointer to the loaded image data
 std::shared_ptr<Image> LoadImage(std::string path);
 
+std::shared_ptr<Sprite> LoadSprite(std::string path, Vec2 frameCount);
+
 /// @brief Creates a color from the given values
 /// @param red Must be in range [0, 31]
 /// @param green Must be in range [0, 31]

@@ -1,5 +1,6 @@
 #include "Data.hpp"
 #include "bmpread.h"
+#include "Sprite.hpp"
 #include <iostream>
 
 std::shared_ptr<Image> LoadImage(std::string path)
@@ -18,6 +19,13 @@ std::shared_ptr<Image> LoadImage(std::string path)
 	image->size.y = bmp.height;
 
 	return image;
+}
+
+std::shared_ptr<Sprite> LoadSprite(std::string path, Vec2 frameCount)
+{
+	auto image1 = LoadImage(path);
+	auto image2 = LoadImage(path.replace(path.find(".bmp"), std::string::npos, "75.bmp"));
+	return std::make_shared<Sprite>(image1, image2, frameCount);
 }
 
 Hall::Color CreateColor(char red, char green, char blue, bool alpha)
