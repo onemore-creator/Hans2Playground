@@ -17,6 +17,8 @@ class Selector : public Entity
 	std::shared_ptr<Entity> eraser;
 	std::shared_ptr<Entity> pencil;
 	
+	void Animate();
+
 	public:
 	void Update() override;
 	Selector(Vec2 position, std::string name = "Selector");

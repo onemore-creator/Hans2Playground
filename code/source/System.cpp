@@ -140,7 +140,8 @@ void Clear(Hall::Color color) {
 }
 
 void Render(const std::shared_ptr<Entity> entity) {
-  entity->sprite->SetScale(gameCamera.GetSpriteScale());
+  short scale = entity->sprite->GetScale();
+  entity->sprite->SetScale(scale + gameCamera.GetSpriteScale());
 
   Vec2 position = entity->position;
   position -= Vec2(Hall::SCREEN_WIDTH, Hall::SCREEN_HEIGHT) / 2;
@@ -151,4 +152,6 @@ void Render(const std::shared_ptr<Entity> entity) {
   position -= entity->sprite->GetScaledFrameSize() / 2;
 
   Render(entity->sprite, position.x, position.y);
+
+  entity->sprite->SetScale(scale);
 }

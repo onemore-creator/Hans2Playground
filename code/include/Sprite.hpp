@@ -26,6 +26,8 @@ public:
 
   void SetScale(short scale);
   void SetActiveFrame(Vec2 frame);
+  Vec2 GetActiveFrame();
+  short GetAnimationLength();
   short GetScale();
   Vec2 GetScaledFrameSize();
   Vec2 GetFrameCount();

@@ -14,5 +14,5 @@ struct Camera
 
 private:
 	float zoom = 1.0f;
-	short spriteScale = -1;
+	short spriteScale = 0;
 };

@@ -49,6 +49,16 @@ void Sprite::SetActiveFrame(Vec2 frame)
 	imageOffset = activeFrame * frameSize;
 }
 
+Vec2 Sprite::GetActiveFrame()
+{
+	return activeFrame;
+}
+
+short Sprite::GetAnimationLength()
+{
+	return animationLength;
+}
+
 short Sprite::GetScale()
 {
 	return scale;
